@@ -1,0 +1,104 @@
+@import "../../styles/responsive.scss";
+.dataTable{
+    @include sm{
+        width: auto;
+    }
+    @include lg{
+        width: auto;
+    }
+    @include md{
+        width: auto;
+    }
+    @include xl{
+        width: auto;
+    }
+    @include xxl{
+        width: auto;
+    }
+    .dataGrid{
+        background-color: white;
+        padding: 20px;
+        font-size: 17px;
+        font-weight: 600;
+
+        .MuiDataGrid-toolbarContainer{
+            flex-direction: row-reverse;
+        }
+    .action{
+        display: flex;
+        gap: 15px;
+        justify-content: center;
+        img{
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+    }
+    }
+    .btn-salida-datatable{
+        width: 100%;
+        padding: 10px;
+        border: none;
+        border-radius: 4px;
+        background-color: #af2b2b;
+        color: white;
+        cursor: pointer;
+    }
+    .btn-salida-datatable:hover{
+        width: 100%;
+        padding: 10px;
+        border: none;
+        border-radius: 4px;
+        background-color: #df5252;
+        color: white;
+        cursor: pointer;
+    }
+    .btn-revision-datatable{
+        width: 100%;
+        padding: 10px;
+        border: none;
+        border-radius: 4px;
+        background-color: #108d25;
+        color: white;
+        cursor: pointer;
+    }
+    .btn-revision-datatable:hover{
+        width: 100%;
+        padding: 10px;
+        border: none;
+        border-radius: 4px; 
+        background-color: #07a722;
+        color: white;
+        cursor: pointer;
+    }
+}
+
+.centered-cell {
+    justify-content: center !important;
+}
+
+.css-rqglhn-MuiTable-root {
+    display: table;
+    width: 100%;
+    border-collapse: separate !important;
+    border-spacing: 0;
+    border-radius: 8px !important;
+    border: 1px solid black;
+}
+
+.tr{
+    width: 25% !important;
+}
+
+.css-1ex1afd-MuiTableCell-root{
+    font-family: "Poppins", sans-serif !important;
+    width: 50% !important;
+}
+
+.css-2ulfj5-MuiTypography-root {
+    font-family: "Poppins", sans-serif !important;
+}
+
+.css-bdhsul-MuiTypography-root-MuiDialogTitle-root{
+    font-family: "Poppins", sans-serif !important;
+}

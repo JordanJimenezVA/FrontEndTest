@@ -1,0 +1,233 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+@import "../../styles/responsive.scss";
+@import "../../styles/variables.scss";
+
+::after,
+::before {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+.select-form-control,
+.react-autosuggest__container {
+    position: relative;
+    flex: 1 1 auto;
+    width: 1%;
+    min-width: 0;
+}
+
+.item-title-x {
+    display: flex !important;
+    color: white !important;
+}
+
+a {
+    text-decoration: none;
+}
+
+li {
+    list-style: none;
+}
+
+h1 {
+    font-weight: 600;
+    font-size: 1.5rem;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+}
+
+.wrapper {
+    display: flex;
+}
+
+.main {
+    min-height: 100vh;
+    width: 100%;
+    overflow: unset;
+    transition: all 0.65s ease-in-out;
+    background-color: #0e2238;
+}
+
+#sidebar {
+    width: 70px;
+    min-width: 70px;
+    z-index: 1000;
+    transition: all .30s ease-in-out;
+    background-color: #0e2238;
+    display: flex;
+    flex-direction: column;
+}
+
+#sidebar.expand {
+    width: 260px;
+    min-width: 260px;
+}
+
+.toggle-btn {
+    background-color: #0e2238;
+    cursor: pointer;
+    border: 0;
+    padding: 1rem 1.5rem;
+}
+
+.toggle-btn i {
+    font-size: 1.5rem;
+    color: #FFF;
+}
+
+.sidebar-logo {
+    margin: auto 0;
+}
+
+.sidebar-logo a {
+    color: #FFF;
+    font-size: 1.15rem;
+    font-weight: 600;
+}
+
+#sidebar:not(.expand) .sidebar-logo,
+#sidebar:not(.expand) .sidebar-span,
+#sidebar:not(.expand) a.sidebar-link span {
+    display: none;
+}
+
+.sidebar-nav {
+    padding: 2rem 0;
+    flex: 1 1 auto;
+}
+
+a.sidebar-link {
+    padding: .925rem 1.625rem;
+    color: #FFF;
+    display: flex;
+    align-items: flex-end;
+    font-size: 0.9rem;
+    white-space: nowrap;
+    border-left: 3px solid transparent;
+}
+
+.sidebar-link i {
+    font-size: 1.5rem;
+    margin-right: .75rem;
+    stroke-width: "1px";
+}
+
+a.sidebar-link:hover {
+    background-color: rgba(255, 255, 255, .075);
+    border-left: 3px solid #3b7ddd;
+}
+
+.sidebar-item {
+    position: relative;
+}
+
+#sidebar:not(.expand) .sidebar-item .sidebar-dropdown {
+    position: absolute;
+    top: 0;
+    left: 70px;
+    background-color: #0e2238;
+    padding: 0;
+    min-width: 15rem;
+    display: none;
+}
+
+#sidebar:not(.expand) .sidebar-item:hover .has-dropdown+.sidebar-dropdown {
+    display: block;
+    width: 100%;
+    opacity: 1;
+}
+
+#sidebar.expand .sidebar-link[data-bs-toggle="collapse"]::after {
+    border: solid;
+    border-width: 0 .075rem .075rem 0;
+    content: "";
+    display: inline-block;
+    padding: 2px;
+    position: absolute;
+    right: 1.5rem;
+    top: 1.4rem;
+    transform: rotate(-135deg);
+    transition: all .2s ease-out;
+
+
+}
+
+#sidebar.expand .sidebar-link[data-bs-toggle="collapse"].collapsed::after {
+    transform: rotate(45deg);
+    transition: all .2s ease-out;
+
+}
+
+.list-unstyled {
+    padding-left: 30px;
+}
+
+.css-9tj150-MuiButton-endIcon {
+    margin-right: 0px !important;
+}
+
+.sidebar-span {
+    color: white;
+    margin-left: 0.7rem;
+}
+
+@media (max-width: 767px) {
+    #sidebar {
+        width: 100%;
+        /* Ajustar a todo el ancho de la pantalla */
+        height: auto;
+        /* Altura automática */
+        max-height: 0;
+        /* Ocultar por defecto */
+        visibility: hidden;
+        /* Ocultar visualmente */
+        position: relative;
+        top: 0;
+        left: 0;
+    }
+
+    .ti-menu-2 {
+        display: flex;
+        visibility: visible;
+    }
+
+    #sidebar.expand {
+        max-height: 100vh;
+        /* Mostrar cuando esté expandido */
+        visibility: visible;
+        /* Visible cuando esté expandido */
+    }
+
+    .toggle-btn {
+        display: flex;
+        /* Mostrar botón de hamburguesa en móviles */
+        //   position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 9999;
+        /* Asegurarse de que esté por encima del contenido */
+    }
+
+    .sidebar-nav {
+        flex-direction: column;
+        /* Dirección vertical para los ítems */
+    }
+
+    .sidebar-link.collapsed {
+        display: block;
+        /* Asegurar que los enlaces sean bloques */
+    }
+
+    .sidebar-dropdown {
+        display: none;
+        /* Ocultar dropdown por defecto */
+    }
+
+    .sidebar-dropdown.show {
+        display: block;
+        /* Mostrar dropdown cuando esté abierto */
+    }
+}

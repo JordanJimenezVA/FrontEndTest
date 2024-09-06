@@ -1,0 +1,61 @@
+@import "./responsive.scss";
+@import "./variables.scss";
+@import "bootstrap/scss/bootstrap";
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+a {
+  text-decoration: none;
+  // color: inherit;
+}
+
+.main {
+  font-family: "Inter", sans-serif;
+  background-color: $main-bg;
+}
+
+.container {
+  display: flex;
+
+  padding-left: 0rem;
+  margin: 0px;
+
+  @media (min-width: 1900px) {
+    
+    max-width: 1900px;
+  }
+
+  @include xxl {
+    max-width: 1300px;
+  }
+
+  @include lg {
+    flex-direction: column;
+  }
+
+}
+
+.menuContainer {
+ 
+  padding: 5px 20px;
+  border-right: 2px solid $soft-bg;
+
+  @include lg {
+    width: max-content;
+    align-self: center;
+    padding-bottom: 100px;
+  }
+
+}
+
+.contentContainer {
+
+  width: 100%;
+  padding-right: 20px;
+  padding-bottom: 45px;
+  padding-left: 20px;
+}

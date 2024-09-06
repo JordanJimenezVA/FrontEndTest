@@ -1,0 +1,91 @@
+.contenedor {
+  color: white;
+}
+
+.formulario {
+  max-width: 400px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+
+  label {
+    display: block;
+    margin-bottom: 0.5rem;
+  }
+
+  input {
+    width: 100%;
+    padding: 0.5rem;
+    margin-bottom: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+  }
+
+  button {
+    padding: 0.5rem 1rem;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+
+  button:hover {
+    background-color: #0056b3;
+  }
+}
+
+.h1formd {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 30px;
+  color: rgb(255, 255, 255);
+}
+
+.formulario select {
+  width: 100%;
+  padding: 0.5rem;
+  margin-bottom: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+.formulario select:hover {
+  border-color: #007bff;
+}
+
+.formulario select:focus {
+  outline: none;
+  border-color: #007bff;
+}
+
+
+.buttons-container {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+  /* Para separar los botones del formulario */
+}
+
+.buttons-left,
+.buttons-right {
+  display: flex;
+  gap: 1rem;
+  /* Espacio entre los botones del mismo grupo */
+}
+.css-1pzb349 {
+  min-height: 50px !important;
+  height: auto !important; /* Adjust the height as needed */
+}
+.MuiDataGrid-virtualScroller {
+  min-height: 50px !important;
+  height: auto !important; /* Adjust the height as needed */
+}
+// .css-qvtrhg-MuiDataGrid-virtualScroller{
+//   min-height: 50px !important;
+//   height: auto !important; /* Adjust the height as needed */
+// }
+
+
