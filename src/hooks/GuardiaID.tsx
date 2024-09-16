@@ -14,16 +14,16 @@ const GuardiaID = (): string | null => {
                 const response = await Axios.get(`${host_server}/IDINST`, {
                     withCredentials: true,
                 });
-                console.log('IDINST recibido:', response.data.IDINST); // Agrega esta línea para verificar el IDINST
+                console.log('IDINST recibido:', response.data.IDINST); // Log para confirmar
                 setIDINST(response.data.IDINST);
             } catch (error: unknown) {
-                if (error instanceof Error) {
-                    console.error('Error al obtener usuario:', error.message);
-                } else {
-                    console.error('Error desconocido:', error);
-                }
-                if (Axios.isAxiosError(error) && error.response?.status === 401) {
-                    navigate('/'); // Redirige al login si el token es inválido o ha expirado
+                console.log('Error en la solicitud:', error); // Log de error general
+                if (Axios.isAxiosError(error)) {
+                    if (error.response?.status === 401) {
+                        navigate('/'); // Redirige si es un error de autenticación
+                    } else {
+                        console.error('Otro error ocurrió:', error.response?.status); // Si es otro tipo de error
+                    }
                 }
             }
         };
