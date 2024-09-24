@@ -1,5 +1,5 @@
-import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+// import { useEffect } from "react";
+// import { useNavigate } from "react-router-dom";
 import "./home.scss";
 import TopBox from "../../components/topBox/TopBox";
 import ChartBox from "../../components/chartbox/ChartBox";
@@ -11,26 +11,11 @@ const host_server = import.meta.env.VITE_SERVER_HOST;
 
 const Home = () => {
   const idInst = GuardiaID();
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    console.log("token home use effect "+token)
-    if (!token) {
-      // Si no hay token, redirige al login
-      navigate("/");
-    }
-  }, [navigate]);
 
   const fetchChartData = async () => {
-    const token = localStorage.getItem("token"); // Esto debería ser opcional si usas cookies
-    console.log("token home " + token);
   
     const response = await fetch(`${host_server}/ChartBox?idinst=${idInst}`, {
-      headers: {
-        'Authorization': `Bearer ${token}` // Si usas cookies, esta línea puede ser opcional
-      },
-      credentials: 'include' // Asegúrate de enviar las cookies
+      credentials: 'include',
     });
   
     if (!response.ok) {

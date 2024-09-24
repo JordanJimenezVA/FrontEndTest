@@ -66,7 +66,7 @@ const DataTable = (props: Props) => {
         field: 'acciones',
         headerName: 'Acciones',
         sortable: false,
-        width: 200,
+        width: 160,
         renderCell: (params) => {
             return (
                 <div className="action">

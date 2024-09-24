@@ -85,12 +85,12 @@ function AgregarNO() {
                             <span className="title">Datos Novedad</span>
                             <div className="fields">
 
-                                {/* <div className="input-field" style={{ width: "100%" }}>
+                                 <div className="input-field" style={{ width: "100%" }}>
                                     <label>Fotos</label>
                                     <div className="input-group">
                                         <input type="file" onChange={handleFileChange} placeholder='INGRESE FOTOS' style={{ alignContent: "center" }} multiple accept=".jpg, .jpeg, .png" className='form-control' id="fotos-input" name={'FOTOS'} />
                                     </div>
-                                </div> */}
+                                </div> 
 
                                 <div className="input-field-obs">
                                     <label>Descripcion Novedad</label>

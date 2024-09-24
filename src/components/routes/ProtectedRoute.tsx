@@ -1,16 +1,17 @@
 import React from 'react';
 import { Navigate } from 'react-router-dom';
 import { JwtPayload, jwtDecode } from 'jwt-decode';
+import Cookies from 'js-cookie'; // Importar la librería para manejar cookies
 
 interface ProtectedRouteProps {
   component: React.ComponentType;
 }
 
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ component: Component }) => {
-  const token = localStorage.getItem('token');
+  // Obtener el token desde la cookie
+  const token = Cookies.get('token');
 
   if (!token) {
-    console.log("protected rute" + token)
     return <Navigate to="/" />; // Redirige al login si no hay token
   }
 
@@ -21,13 +22,11 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ component: Component })
 
     // Solo verificamos la expiración si el campo exp existe
     if (decodedToken.exp && decodedToken.exp < currentTime) {
-      console.log("protected rute 2")
-      localStorage.removeItem('token'); // Opcional: limpiar el token si ha expirado
+      Cookies.remove('token'); // Eliminar la cookie si ha expirado
       return <Navigate to="/" />; // Redirige si el token ha expirado
     }
   } catch (error) {
     console.error('Error al decodificar el token:', error);
-    console.log("protected rute 3")
     return <Navigate to="/" />; // Si hay un error al decodificar, redirige al login
   }
 

@@ -34,7 +34,6 @@ function FormularioSalida() {
     MARCA: '',
 
   });
-  console.log("id salida" + IDINST);
   useEffect(() => {
     getRegistros(IDR);
   }, [IDR]);

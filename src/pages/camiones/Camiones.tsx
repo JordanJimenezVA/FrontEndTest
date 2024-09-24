@@ -28,7 +28,7 @@ const columns: GridColDef[] = [
     field: 'PATENTECA',
     headerName: 'Patente ',
     type: 'string',
-    width: 150,
+    width: 130,
     editable: false,
   },
   {

@@ -14,7 +14,6 @@ const GuardiaID = (): string | null => {
                 const response = await Axios.get(`${host_server}/IDINST`, {
                     withCredentials: true,
                 });
-                console.log('IDINST recibido:', response.data.IDINST); // Log para confirmar
                 setIDINST(response.data.IDINST);
             } catch (error: unknown) {
                 console.log('Error en la solicitud:', error); // Log de error general

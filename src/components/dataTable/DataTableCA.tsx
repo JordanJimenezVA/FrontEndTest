@@ -65,7 +65,7 @@ const DataTableCA = (props: Props) => {
         field: 'acciones',
         headerName: 'Acciones',
         sortable: false,
-        width: 150,
+        width: 130,
         renderCell: (params) => {
             return (
                 <div className="action">
