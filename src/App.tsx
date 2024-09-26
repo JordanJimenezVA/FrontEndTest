@@ -110,11 +110,16 @@ function App() {
       children: [
         {
           path: "/Home",
-          element: <ProtectedRoute component={Home} />, // Ruta protegida
+          element: <ProtectedRoute component={Home} />,
         },
         {
           path: "/Personal Interno",
-          element: <ProtectedRoute component={PersonalInterno} /> // Ruta protegida
+          element: (
+            <>
+              {console.log("Entrando a Personal Interno Route")}
+              <ProtectedRoute component={PersonalInterno} />
+            </>
+          ),
         },
         {
           path: "/Personal Externo",

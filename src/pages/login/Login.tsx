@@ -23,7 +23,10 @@ export default function Login() {
 
     try {
       const isRUT = values.rut;
-      const res = await axios.post(`${host_server}/Login`, { rutU: isRUT, passwordU: values.password });
+      const res = await axios.post(`${host_server}/Login`, 
+        { rutU: isRUT, passwordU: values.password },
+        { withCredentials: true }  // Asegúrate de que se envíen las cookies
+    );
 
       if (res.data.Status === 'Success') {
         // Aquí no necesitas almacenar el token porque está en una cookie

@@ -8,30 +8,32 @@ interface ProtectedRouteProps {
 }
 
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ component: Component }) => {
-  // Obtener el token desde la cookie
-  const token = Cookies.get('token');
-
+  const token = Cookies.get('token');  // Asegúrate de que el token esté disponible en las cookies
+  console.log("Inicio de ProtectedRoute");  // Agregar al inicio del componente
+  console.log("Token leído:", token);  // Justo después de leer el token
+  alert("Token leído: " + token);
   if (!token) {
-    return <Navigate to="/" />; // Redirige al login si no hay token
+    console.log("No se encontró el token, redirigiendo al login");
+    return <Navigate to="/" />;
   }
 
-  // Verificamos si el token ha expirado
   try {
     const decodedToken = jwtDecode<JwtPayload>(token);
-    const currentTime = Date.now() / 1000; // En segundos
+    console.log("Token decodificado:", decodedToken);
+    const currentTime = Date.now() / 1000;
 
-    // Solo verificamos la expiración si el campo exp existe
     if (decodedToken.exp && decodedToken.exp < currentTime) {
-      Cookies.remove('token'); // Eliminar la cookie si ha expirado
-      return <Navigate to="/" />; // Redirige si el token ha expirado
+      console.log("El token ha expirado, eliminando la cookie y redirigiendo al login");
+      Cookies.remove('token');
+      return <Navigate to="/" />;
     }
   } catch (error) {
     console.error('Error al decodificar el token:', error);
-    return <Navigate to="/" />; // Si hay un error al decodificar, redirige al login
+    return <Navigate to="/" />;
   }
 
-  // Si el token es válido, renderiza el componente
   return <Component />;
 };
+
 
 export default ProtectedRoute;
