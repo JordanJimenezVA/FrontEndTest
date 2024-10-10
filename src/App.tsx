@@ -116,7 +116,6 @@ function App() {
           path: "/Personal Interno",
           element: (
             <>
-              {console.log("Entrando a Personal Interno Route")}
               <ProtectedRoute component={PersonalInterno} />
             </>
           ),

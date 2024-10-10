@@ -47,7 +47,10 @@
 .formlogin button:hover,.formlogin button:active,.formlogin button:focus {
   background: $main-bg;
 }
-
+.error-message {
+  color: red;
+  margin-top: 10px;
+}
 body {
     background-color: #0e2238;   
 }

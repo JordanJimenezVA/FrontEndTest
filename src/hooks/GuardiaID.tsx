@@ -16,7 +16,6 @@ const GuardiaID = (): string | null => {
                 });
                 setIDINST(response.data.IDINST);
             } catch (error: unknown) {
-                console.log('Error en la solicitud:', error); // Log de error general
                 if (Axios.isAxiosError(error)) {
                     if (error.response?.status === 401) {
                         navigate('/'); // Redirige si es un error de autenticación

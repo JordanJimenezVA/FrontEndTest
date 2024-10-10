@@ -12,6 +12,7 @@ export default function Login() {
     password: '',
   });
 
+  const [errorMessage, setErrorMessage] = useState(''); // Estado para manejar mensajes de error
   const navigate = useNavigate();
   const { setUserType, setNombreUsuario } = useAuth();
 
@@ -29,33 +30,29 @@ export default function Login() {
     );
 
       if (res.data.Status === 'Success') {
-        // Aquí no necesitas almacenar el token porque está en una cookie
-        // Realiza una solicitud para obtener el tipo de usuario y nombre
         const userTypeRes = await axios.get(`${host_server}/UserType`, {
           params: {
             RUTU: isRUT,
           },
-          withCredentials: true, // Asegúrate de enviar cookies con esta solicitud
+          withCredentials: true, 
         });
 
         const userType = userTypeRes.data.userType;
         const nombreUsuario = userTypeRes.data.nombreUsuario;
 
-        // Almacenar en el contexto de autenticación
         setNombreUsuario(nombreUsuario);
         setUserType(userType);
 
-        // Guardar otros datos en localStorage si es necesario
         localStorage.setItem('nombreUsuario', nombreUsuario);
         localStorage.setItem('userType', userType);
 
-        navigate('/Home');  // Redirigir al home
+        navigate('/Home');  
       } else {
-        alert('Error al ingresar/Verificar datos');
+        setErrorMessage('Error al ingresar/Verificar datos');
       }
     } catch (err) {
       console.error('Error during login:', err);
-      alert('Ocurrió un error al intentar iniciar sesión. Por favor, inténtelo de nuevo más tarde.');
+      setErrorMessage('Ocurrió un error al intentar iniciar sesión. Por favor, inténtelo de nuevo más tarde.');
     }
   };
 
@@ -100,6 +97,9 @@ export default function Login() {
             autoComplete="password"
           />
           <button type="submit">Ingresar</button>
+
+          {/* Mostrar mensaje de error en el cuadro de login */}
+          {errorMessage && <div className="error-message">{errorMessage}</div>}
         </form>
       </div>
     </div>
