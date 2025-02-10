@@ -1,60 +1,80 @@
+import { useEffect } from "react";
 import "./topbox.scss";
-import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
-import GuardiaID from "../../hooks/GuardiaID";
+
 interface Log {
-  IDL: number;
-  PERSONAL: string;
-  APELLIDO: string;
-  PATENTE: string;
-  ESTADO: string;
-  ROL: string;
+  IDR: number;
+  NombreP: string;
+  ApellidoP: string;
+  Patente: string;
+  Estado: string;
+  TipoPersona: string;
+  FechaSalida: string;
+  Modelo: string;
 }
 
 const TopBox = () => {
-  const idInst = GuardiaID(); 
-  const [logs, setLogs] = useState<Log[]>([]);
+  const idInst = localStorage.getItem("instalacionU") || "";
   const host_server = import.meta.env.VITE_SERVER_HOST;
 
-
-  const { data } = useQuery({
+  const { data: logs = [] } = useQuery<Log[]>({
     queryKey: ['logs', idInst],
-    queryFn: () =>
-      fetch(`${host_server}/TopBox?idInst=${idInst}`, {
+    queryFn: async () => {
+      const response = await fetch(`${host_server}/TopBox?idInst=${idInst}`, {
         method: 'GET',
-        credentials: 'include' // Asegúrate de enviar cookies con la solicitud
-      }).then((res) => res.json()),
+        credentials: 'include',
+      });
+      const result = await response.json();
+
+
+      return Array.isArray(result) && result[0]
+        ? result[0].sort((a: Log, b: Log) => b.IDR - a.IDR)
+        : [];
+    },
     enabled: !!idInst,
+    refetchInterval: 5000,
   });
+
   useEffect(() => {
-    if (data && Array.isArray(data) && data.length > 0) {
-      setLogs(data[0]); // Utilizar el primer array de datos
+    if (logs.length > 0) {
     }
-  }, [data]);
+  }, [logs]);
 
   return (
     <div className="topBox">
-      <div className="h1d">
+      <div className="h1d" style={{ color: "black" }}>
         <h1>Actividades Recientes</h1>
       </div>
 
       <div className="list">
-        {Array.isArray(logs) && logs.slice(0, 7).map((log, index) => (
-          <div className="listItem" key={`${log.IDL}-${index}`}>
-            <div className="user">
-              <div className="userTexts">
-                <span className="username">{log.PERSONAL} {log.APELLIDO}</span>
-                <span className="type">{log.ROL}</span>
+        {logs
+          .slice(0, 7)
+          .map((log, index) => (
+            <div className="listItem" key={`${log.IDR}-${index}`}>
+              <div className="user">
+                <div className="userTexts">
+                  <span className="username">
+                    {log.NombreP || log.ApellidoP
+                      ? `${log.NombreP || ''} ${log.ApellidoP || ''}`.trim()
+                      : log.Patente}
+                  </span>
+                  <span className="type">
+                    {log.TipoPersona ? "" : log.Modelo?.trim()}
+                  </span>
+                  <span className="type">{log.TipoPersona}</span>
+                </div>
               </div>
+              <span className={`action ${log.Estado === 'Salida' ? 'redText' : 'greenText'}`}>
+                {log.Estado}
+              </span>
+
             </div>
-            <span className={`action ${log.ESTADO === 'SALIDA' ? 'redText' : 'greenText'}`}>
-              {log.ESTADO}
-            </span>
-          </div>
-        ))}
+
+
+          ))}
       </div>
     </div>
   );
-}
+};
 
 export default TopBox;

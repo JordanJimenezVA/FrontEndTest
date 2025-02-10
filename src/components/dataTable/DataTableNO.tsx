@@ -1,4 +1,4 @@
-import { DataGrid, GridColDef, GridToolbar } from "@mui/x-data-grid";
+import { DataGrid, GridColDef, GridToolbarQuickFilter  } from "@mui/x-data-grid";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -78,7 +78,7 @@ const DataTableNO = (props: Props) => {
                 localeText={{
                     noRowsLabel: 'No hay registros',
                 }}
-                slots={{ toolbar: GridToolbar }}
+                slots={{ toolbar: GridToolbarQuickFilter  }}
                 slotProps={{
                     toolbar: {
                         showQuickFilter: true,

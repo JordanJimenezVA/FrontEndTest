@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { DataGrid, GridColDef, GridToolbar } from "@mui/x-data-grid";
+import { DataGrid, GridColDef, GridToolbarQuickFilter  } from "@mui/x-data-grid";
 import "./dataTable.scss";
 import axios from "axios";
 import Swal from 'sweetalert2';
@@ -25,15 +25,15 @@ const DataTablePE = (props: Props) => {
 
     const deleteMutationa = useMutation({
 
-        mutationFn: (IDPE: number) => {
-            return axios.delete(`${host_server}/${props.slug}/${IDPE}`);
+        mutationFn: (RUTP: number) => {
+            return axios.delete(`${host_server}/${props.slug}/${RUTP}`);
         },
-        onSuccess: (IDPE) => {
+        onSuccess: (RUTP) => {
             Swal.fire('Borrado!', 'El registro ha sido borrado.', 'success');
             queryClient.invalidateQueries({
                 queryKey: [props.slug]
             });
-            setRows(rows.filter((row: any) => row.IDPE !== IDPE));
+            setRows(rows.filter((row: any) => row.RUTP !== RUTP));
         },
         onError: () => {
             Swal.fire('Error!', 'No se pudo borrar el registro.', 'error');
@@ -41,7 +41,7 @@ const DataTablePE = (props: Props) => {
     });
 
 
-    const handleDelete = (IDPE: number) => {
+    const handleDelete = (RUTP: number) => {
         Swal.fire({
             title: '¿Estás seguro de borrar?',
             text: "¡No podrás revertir esto!",
@@ -52,13 +52,13 @@ const DataTablePE = (props: Props) => {
             confirmButtonText: 'Sí, bórralo!'
         }).then((result) => {
             if (result.isConfirmed) {
-                deleteMutationa.mutate(IDPE);
+                deleteMutationa.mutate(RUTP);
             }
         });
     };
 
-    const handleEditClick = (IDPE: number) => {
-        navigate(`/EditarPersonalExterno/${IDPE}`);
+    const handleEditClick = (RUTP: number) => {
+        navigate(`/EditarPersonal/${RUTP}`);
     }
 
 
@@ -71,14 +71,14 @@ const DataTablePE = (props: Props) => {
             return (
                 <div className="action">
                     <IconButton
-                        onClick={() => handleEditClick(params.row.IDPE)}
+                        onClick={() => handleEditClick(params.row.RUTP)}
                         color="primary"
                         aria-label="Editar"
                     >
                         <EditIcon />
                     </IconButton>
                     <IconButton
-                        onClick={() => handleDelete(params.row.IDPE)}
+                        onClick={() => handleDelete(params.row.RUTP)}
                         color="secondary"
                         aria-label="Eliminar"
                     >
@@ -96,7 +96,7 @@ const DataTablePE = (props: Props) => {
                 editMode="row"
                 columns={[...props.columns, actionColumn]}
 
-                getRowId={(row) => `${row.IDPE}`}
+                getRowId={(row) => `${row.RUTP}`}
                 initialState={{
                     pagination: {
                         paginationModel: {
@@ -107,7 +107,7 @@ const DataTablePE = (props: Props) => {
                 localeText={{
                     noRowsLabel: 'No hay registros',
                 }}
-                slots={{ toolbar: GridToolbar }}
+                slots={{ toolbar: GridToolbarQuickFilter  }}
                 slotProps={{
                     toolbar: {
                         showQuickFilter: true,

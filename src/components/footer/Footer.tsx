@@ -1,13 +1,21 @@
-import "./footer.scss";
-import useNombreINST from '../../hooks/NombreINST';
+import { useEffect, useState } from 'react';
+import './footer.scss';
 
 const Footer = () => {
-    const nombreINST = useNombreINST();
+    const [instalacionU, setInstalacionU] = useState('');
+
+    useEffect(() => {
+        const storedInstalacionU = localStorage.getItem('instalacionUsuario');
+        if (storedInstalacionU) {
+            setInstalacionU(storedInstalacionU);
+        }
+    }, []);
+
     return (
         <footer className="footer">
             <div>
-                {nombreINST ? (
-                    <p>Usted esta en la instalación: {nombreINST}</p>
+                {instalacionU ? (
+                    <p>Usted está en la instalación: {instalacionU}</p>
                 ) : (
                     <p>Cargando nombre de la instalación...</p>
                 )}

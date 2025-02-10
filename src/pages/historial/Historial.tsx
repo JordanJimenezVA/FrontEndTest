@@ -3,52 +3,61 @@ import "./logs.scss"
 import { GridColDef } from "@mui/x-data-grid";
 import { useQuery } from "@tanstack/react-query";
 const host_server = import.meta.env.VITE_SERVER_HOST;
+const IDINST = localStorage.getItem("instalacionU") || "";
 
-import useGuardiaID from "../../hooks/GuardiaID";
 
 
 
 
 const columns: GridColDef[] = [
-  { field: 'IDL', headerName: 'ID', width: 40, type: 'number' },
   {
-    field: 'NOMBRE',
+    field: 'IDR',
+    headerName: 'ID',
+    type: 'string',
+    width: 50,
+    editable: false,
+  },
+  {
+    field: 'NombreP',
     headerName: 'Nombre',
     width: 200,
     editable: false,
     type: 'string',
-    valueGetter: (params) => `${params.row.PERSONAL} ${params.row.APELLIDO}`,
+    valueGetter: (params) => {
+      const nombreCompleto = `${params.row.NombreP || ''} ${params.row.ApellidoP || ''}`.trim();
+      return nombreCompleto 
+        ? nombreCompleto 
+        : params.row.Patente || "Sin Datos";
+    },
   },
   {
-    field: 'RUT',
+    field: 'RutP',
     headerName: 'Rut ',
     type: 'string',
     width: 140,
     editable: false,
   },
   {
-    field: 'PATENTE',
-    headerName: 'Patente',
-    width: 110,
-    editable: false,
-    type: 'string',
-  },
-  {
-    field: 'ROL',
+    field: 'ActividadP',
     headerName: 'Rol',
     width: 180,
     editable: false,
     type: 'string',
+    valueGetter: (params) => {
+      return params.row.ActividadP
+        ? params.row.ActividadP || "Sin Cargo"
+        : params.row.Modelo || "Tipo no especificado";
+    },
   },
   {
-    field: 'FECHAINGRESO',
+    field: 'FechaEntrada',
     headerName: 'Fecha Ingreso',
     width: 180,
     editable: false,
     type: 'string',
   },
   {
-    field: 'FECHASALIDA',
+    field: 'FechaSalida',
     headerName: 'Fecha Salida',
     width: 180,
     editable: false,
@@ -57,11 +66,8 @@ const columns: GridColDef[] = [
 ];
 const Historial = () => {
 
-  const IDINST = useGuardiaID();
-
-
   const { isLoading, data } = useQuery({
-    queryKey: ['Logs', IDINST],
+    queryKey: ['historial', IDINST],
     queryFn: () =>
       fetch(`${host_server}/logs?IDINST=${IDINST}`).then((res) =>
         res.json(),
@@ -81,7 +87,7 @@ const Historial = () => {
       {isLoading ? (
         "Loading..."
       ) : (
-        < DataTableL slug="Logs" columns={columns} rows={data} />
+        < DataTableL slug="historial" columns={columns} rows={data} />
       )}
     </div>
   )

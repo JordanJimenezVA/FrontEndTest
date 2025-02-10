@@ -1,13 +1,11 @@
 import { useState } from 'react';
-import { DataGrid, GridColDef, GridToolbar } from "@mui/x-data-grid";
+import { DataGrid, GridColDef, GridToolbarQuickFilter  } from "@mui/x-data-grid";
 import "./dataTable.scss";
 import axios from "axios";
 import Swal from 'sweetalert2';
 const host_server = import.meta.env.VITE_SERVER_HOST;
 import { IconButton } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/DeleteOutlined';
-import EditIcon from '@mui/icons-material/Edit';
-import { useNavigate } from 'react-router-dom';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 type Props = {
@@ -19,21 +17,20 @@ type Props = {
 const DataTableNG = (props: Props) => {
 
     const [rows, setRows] = useState<object[]>(props.rows);
-    const navigate = useNavigate();
     const queryClient = useQueryClient();
 
 
-    const deleteMutationa = useMutation({
+    const editMutation = useMutation({
 
-        mutationFn: (IDNG: number) => {
-            return axios.delete(`${host_server}/${props.slug}/${IDNG}`);
+        mutationFn: (RUTP: string) => {
+            return axios.put(`${host_server}/${props.slug}/${RUTP}`);
         },
-        onSuccess: (IDNG) => {
+        onSuccess: (RUTP) => {
             Swal.fire('Borrado!', 'El registro ha sido borrado.', 'success');
             queryClient.invalidateQueries({
                 queryKey: [props.slug]
             });
-            setRows(rows.filter((row: any) => row.IDNG !== IDNG));
+            setRows(rows.filter((row: any) => row.RUTP !== RUTP));
         },
         onError: () => {
             Swal.fire('Error!', 'No se pudo borrar el registro.', 'error');
@@ -41,26 +38,22 @@ const DataTableNG = (props: Props) => {
     });
 
 
-    const handleDelete = (IDNG: number) => {
+    const handleEdit = (RUTP: string) => {
         Swal.fire({
-            title: '¿Estás seguro de borrar?',
-            text: "¡No podrás revertir esto!",
+            title: '¿Eliminar de la lista?',
+            text: "Esta persona se removera de la lista",
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
             cancelButtonColor: '#d33',
-            confirmButtonText: 'Sí, bórralo!'
+            confirmButtonText: 'Sí, Confirmo!',
+            cancelButtonText: 'Cancelar'
         }).then((result) => {
             if (result.isConfirmed) {
-                deleteMutationa.mutate(IDNG);
+                editMutation.mutate(RUTP);
             }
         });
     };
-
-    const handleEditClick = (IDNG: number) => {
-        navigate(`/EditarPersonasReportadas/${IDNG}`);
-    }
-
 
     const actionColumn: GridColDef = {
         field: 'acciones',
@@ -71,14 +64,7 @@ const DataTableNG = (props: Props) => {
             return (
                 <div className="action">
                     <IconButton
-                        onClick={() => handleEditClick(params.row.IDNG)}
-                        color="primary"
-                        aria-label="Editar"
-                    >
-                        <EditIcon />
-                    </IconButton>
-                    <IconButton
-                        onClick={() => handleDelete(params.row.IDNG)}
+                        onClick={() => handleEdit(params.row.RUTP)}
                         color="secondary"
                         aria-label="Eliminar"
                     >
@@ -107,7 +93,7 @@ const DataTableNG = (props: Props) => {
                 localeText={{
                     noRowsLabel: 'No hay registros',
                 }}
-                slots={{ toolbar: GridToolbar }}
+                slots={{ toolbar: GridToolbarQuickFilter  }}
                 slotProps={{
                     toolbar: {
                         showQuickFilter: true,

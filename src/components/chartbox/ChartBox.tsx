@@ -22,7 +22,6 @@ const ChartBox = (props: Props) => {
         className={props.title === "Total en Recinto" ? "hidden-link" : ""}
         style={{ color: "#fga1" }}
       >
-        Ver todos
       </Link>
     </div>
   );

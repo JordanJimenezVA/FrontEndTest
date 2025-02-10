@@ -1,8 +1,8 @@
-import { GridColDef } from "@mui/x-data-grid";
-import DataTableNG from "../../components/dataTable/DataTableNG"
-import "./personasreportadas.scss"
-import { useQuery } from "@tanstack/react-query";
+import "./personalExterno.scss";
+import DataTablePE from "../../components/dataTable/DataTablePE";
 import { useNavigate } from "react-router-dom";
+import { GridColDef } from "@mui/x-data-grid";
+import { useQuery } from "@tanstack/react-query";
 import { Button } from "@mui/material";
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 const host_server = import.meta.env.VITE_SERVER_HOST;
@@ -32,39 +32,35 @@ const columns: GridColDef[] = [
   },
 ];
 
-const PersonasReportadas = () => {
+const persona = () => {
 
   const navigate = useNavigate();
 
   const { isLoading, data } = useQuery({
-    queryKey: ['Personas Reportadas'],
+    queryKey: ['persona'],
     queryFn: () =>
-      fetch(`${host_server}/PersonasReportadas`).then((res) =>
+      fetch(`${host_server}/Personal`).then((res) =>
         res.json(),
       ),
   })
 
 
-  const handleIngresarNG = () => {
-    navigate(`/ReportarPersona`);
+  const handleIngresarPE = () => {
+    navigate(`/AgregarPersonal`);
   }
-
-
   return (
-    <div className="NG">
+    <div className="PE">
       <div className="info">
-        <h1 className="h1d">Personas Reportadas</h1>
-
-        <Button onClick={handleIngresarNG} variant="contained" endIcon={<PersonAddIcon />} >Reportar Persona </Button>
+        <h1 className="h1d">Listado Personas</h1>
+        <Button onClick={handleIngresarPE} variant="contained" endIcon={<PersonAddIcon />} >Ingresar Personal </Button>
       </div>
       {isLoading ? (
         "Loading..."
       ) : (
-        < DataTableNG slug="Personas Reportadas" columns={columns} rows={data} />
+        < DataTablePE slug="persona" columns={columns} rows={data} />
       )}
-
     </div>
   )
 }
 
-export default PersonasReportadas
+export default persona

@@ -5,20 +5,20 @@ import DataTableNO from "../../components/dataTable/DataTableNO";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@mui/material";
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
-import GuardiaID from "../../hooks/GuardiaID";
 const host_server = import.meta.env.VITE_SERVER_HOST;
 
+const IDINST = localStorage.getItem("instalacionU") || "";
 const columns: GridColDef[] = [
   { field: 'IDNO', headerName: 'ID', width: 40, type: 'number' },
   {
-    field: 'HORANO',
+    field: 'Fecha',
     headerName: 'Fecha Ingreso',
     width: 180,
     editable: false,
-    type: 'DATE',
+    type: 'string',
   },
   {
-    field: 'GUARDIANO',
+    field: 'Guardia',
     headerName: 'Guardia',
     width: 170,
     editable: false,
@@ -27,7 +27,7 @@ const columns: GridColDef[] = [
 ];
 
 const TablaNovedad = () => {
-  const IDINST = GuardiaID();
+
 
   const { isLoading, data, error } = useQuery({
     queryKey: ['Novedades', IDINST],

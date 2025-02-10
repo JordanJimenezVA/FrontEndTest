@@ -1,153 +1,117 @@
+// menu.tsx
+import {
+  ClipboardDocumentListIcon,
+  UsersIcon,
+  TruckIcon,
+  ShieldExclamationIcon,
+  DocumentTextIcon,
+  ClipboardDocumentCheckIcon,
+  ClipboardIcon,
+  ListBulletIcon,
+  HomeIcon,
+} from "@heroicons/react/24/solid"; // Puedes cambiar a outline si prefieres bordes
+
 export const menu = [
   {
     id: 1,
+    title: "Monitoreo",
+    icon: HomeIcon, // Icono de lista con check para "Marcar Entrada"
+    role: ["Administrador", "Guardia", "Supervisor"],
+    url: "/home",
+  },
+  {
+    id: 2,
     title: "Gestión",
-    icon: "lni lni-clipboard",
+    icon: ClipboardDocumentListIcon, // Icono principal de Gestión
     role: ["Administrador", "Supervisor"],
     listItems: [
       {
         id: 1,
-        title: "Personal Externo",
-        url: "/Personal Externo",
-        icon: "ti ti-users",
+        title: "Agregar Personal",
+        url: "/Persona",
+        icon: UsersIcon, // Icono de usuarios para representar Personal
       },
       {
         id: 2,
-        title: "Personal Interno",
-        url: "/Personal Interno",
-        icon: "ti ti-user",
+        title: "Agregar Transporte",
+        url: "/Transporte",
+        icon: TruckIcon, // Icono de camión para Transporte
       },
       {
         id: 3,
-        title: "Camiones",
-        url: "/Camiones",
-        icon: "lni lni-delivery",
+        title: "Reportar Persona",
+        url: "/Personas Reportadas",
+        icon: ShieldExclamationIcon, // Icono de exclamación para reportar
       },
       {
         id: 4,
-        title: "Reportar Persona",
-        url: "/Personas Reportadas",
-        icon: "ti ti-user-exclamation",
-      },
-      {
-        id: 5,
         title: "Usuarios",
         url: "/Usuarios",
-        icon: "ti ti-users",
+        icon: UsersIcon, // Reutilizamos el icono de usuarios
       },
     ],
   },
   {
-    id: 2,
+    id: 3,
     title: "Marcar Entrada",
-    icon: "ti ti-list-check",
+    icon: ClipboardDocumentCheckIcon, // Icono de lista con check para "Marcar Entrada"
     role: ["Administrador", "Guardia"],
-    listItems: [
-      {
-        id: 1,
-        title: "Personal Externo",
-        url: "/FormularioPersonalExterno",
-        icon: "ti ti-users",
-      },
-      {
-        id: 2,
-        title: "Personal Interno",
-        url: "/FormularioPersonalInterno",
-        icon: "ti ti-user",
-      },
-      {
-        id: 3,
-        title: "Camiones",
-        url: "/FormularioCamiones",
-        icon: "lni lni-delivery",
-      },
-    ],
+    url: "/FormularioIngreso",
   },
-  // {
-  //   id: 3,
-  //   title: "Revision",
-  //   icon: "ti ti-file-description",
-  //   role: ["Administrador", "Supervisor"],
-  //   listItems: [
-  //     {
-  //       id: 1,
-  //       title: "Revisión Camiones",
-  //       url: "/Revision",
-  //       icon: "lni lni-delivery",
-  //     },
-  //     {
-  //       id: 2,
-  //       title: "Informe Camiones",
-  //       url: "/InformeCamion",
-  //       icon: "ti ti-file-description",
-  //     }
-  //   ],
-  // },
   {
     id: 4,
     title: "Marcar Salida",
-    icon: "ti ti-clipboard-x",
+    icon: ClipboardIcon, // Icono de lista con una X para "Marcar Salida"
     role: ["Administrador", "Guardia"],
-    listItems: [
-      {
-        id: 1,
-        title: "Marcar Salida Camión",
-        url: "/TablaIngreso",
-        icon: "lni lni-delivery",
-      },
-      {
-        id: 2,
-        title: "Marcar Salida",
-        url: "/TablaIngresoRE",
-        icon: "ti ti-clipboard-text",
-      },
-      {
-        id: 3,
-        title: "Historial",
-        url: "/Logs",
-        icon: "ti ti-file-description",
-      }
-    ],
+    url: "/TablaIngreso",
   },
   {
     id: 5,
+    title: "Logs",
+    icon: ClipboardDocumentListIcon, // Ícono de documento para Logs
+    role: ["Administrador", "Guardia"],
+    url: "/Logs",
+  },
+  {
+    id: 6,
     title: "Novedades",
-    icon: "lni lni-list",
+    icon: ListBulletIcon, // Icono de lista para Novedades
     role: ["Administrador", "Guardia"],
     listItems: [
       {
         id: 1,
         title: "Registrar Novedad",
         url: "/Novedades",
-        icon: "ti ti-file-description",
-      }
+        icon: DocumentTextIcon, // Icono de documento para "Registrar Novedad"
+      },
     ],
   },
+  
 ];
-
-
 export const chartBoxUser = {
   color: "#8884d8",
-  icon: "/userIcon.svg",
+  icon: "",
   title: "Total en Recinto",
+  url: ""
 };
 
 export const chartBoxProduct = {
   color: "skyblue",
   icon: "/productIcon.svg",
   title: "Personal Interno",
-  url: "/TablaIngresoRE"
+  url: ""  
 };
+
 export const chartBoxRevenue = {
   color: "teal",
   icon: "/revenueIcon.svg",
   title: "Personal Externo",
-  url: "/TablaIngresoRE"
+  url: ""  
 };
+
 export const chartBoxConversion = {
   color: "gold",
   icon: "/conversionIcon.svg",
   title: "Camiones",
-    url: "/TablaIngreso"
+  url: "/TablaIngreso"
 };
-

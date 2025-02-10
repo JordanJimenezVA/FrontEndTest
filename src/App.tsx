@@ -5,58 +5,54 @@ import "./styles/global.scss";
 import { RouterProvider, createBrowserRouter, Outlet } from "react-router-dom";
 
 import PersonalInterno from "./pages/personalinterno/PersonalInterno";
-import PersonalExterno from "./pages/personalexterno/PersonalExterno";
-import Camiones from "./pages/camiones/Camiones";
+import persona from "./pages/personalexterno/persona";
+import Transporte from "./pages/camiones/Transporte.js";
 import PersonasReportadas from "./pages/personasreportadas/PersonasReportadas";
 import Usuarios from "./pages/usuarios/Usuarios";
 import Menu from "./components/menu/Menu";
 import Login from "./pages/login/Login";
 
 // @ts-ignore
-import AgregarPI from "./components/add/AgregarPI";
+import AgregarPersonaReportada from "./components/add/AgregarPersonaReportada.jsx"
 // @ts-ignore
-import AgregarNG from "./components/add/AgregarNG"
+import AgregarPersonal from "./components/add/AgregarPersonal.jsx";
+
 // @ts-ignore
-import AgregarPE from "./components/add/AgregarPE";
-// @ts-ignore
-import AgregarCA from "./components/add/AgregarCA";
+import AgregarTransporte from "./components/add/AgregarTransporte.jsx";
 // @ts-ignore
 import AgregarNO from "./components/add/AgregarNO";
 // @ts-ignore
-import AgregarU from "./components/add/AgregarU";
+import AgregarUsuario from "./components/add/AgregarUsuario.jsx";
 
 
 import { AuthProvider } from './hooks/Auth';
 
 
-// @ts-ignore
-import FormularioPersonalInterno from "./pages/formd/FormularioPersonalInterno";
-// @ts-ignore
-import FormularioPersonalExterno from "./pages/formd/FormularioPersonalExterno";
-// @ts-ignore
-import FormularioCamiones from "./pages/formd/FormularioCamiones";
-// @ts-ignore
-import FormularioSalida from "./pages/formsalida/FormularioSalida";
-// @ts-ignore
-import FormularioSalidaRE from "./pages/formsalidare/FormularioSalidaRE";
-
 
 // @ts-ignore
-import EditarPI from "./pages/editar/EditarPI";
+import FormularioIngreso from "./pages/FormularioEntrada/FormularioIngreso.jsx";
 // @ts-ignore
-import EditarPE from "./pages/editar/EditarPE";
+import FormularioCamiones from "./pages/FormularioEntrada/FormularioCamiones.jsx";
+
 // @ts-ignore
-import EditarCA from "./pages/editar/EditarCA";
+import FormularioSalida from "./pages/FormularioSalida/FormularioSalida.jsx";
+
+
+
+// @ts-ignore
+import EditarPE from "./pages/editar/EditarPersona";
+// @ts-ignore
+import EditarTransporte from "./pages/editar/EditarTransporte.jsx";
 // @ts-ignore
 import EditarNG from "./pages/editar/EditarNG";
 // @ts-ignore
-import EditarU from "./pages/editar/EditarU";
+import EditarUsuario from "./pages/editar/EditarUsuario.jsx";
 // @ts-ignore
 import VerNovedad from "./pages/viewnovedad/VerNovedad";
 
 import TablaIngreso from "./pages/tablaingreso/TablaIngreso";
 
-import TablaIngresoRE from "./pages/tablaingresoRE/TablaIngresoRE";
+
 
 import TablaNovedad from "./pages/tablanovedad/TablaNovedad";
 
@@ -121,12 +117,12 @@ function App() {
           ),
         },
         {
-          path: "/Personal Externo",
-          element: <ProtectedRoute component={PersonalExterno} /> // Ruta protegida
+          path: "/Persona",
+          element: <ProtectedRoute component={persona} /> // Ruta protegida
         },
         {
-          path: "/Camiones",
-          element: <ProtectedRoute component={Camiones} /> // Ruta protegida
+          path: "/Transporte",
+          element: <ProtectedRoute component={Transporte} /> // Ruta protegida
         },
         {
           path: "/Personas Reportadas",
@@ -137,44 +133,33 @@ function App() {
           element: <ProtectedRoute component={Usuarios} /> // Ruta protegida
         },
         {
-          path: "/FormularioPersonalInterno",
-          element: <ProtectedRoute component={FormularioPersonalInterno} /> // Ruta protegida
-        },
-        {
-          path: "/FormularioPersonalExterno",
-          element: <ProtectedRoute component={FormularioPersonalExterno} /> // Ruta protegida
+          path: "/FormularioIngreso",
+          element: <ProtectedRoute component={FormularioIngreso} /> // Ruta protegida
         },
         {
           path: "/FormularioCamiones",
           element: <ProtectedRoute component={FormularioCamiones} /> // Ruta protegida
         },
+
         {
-          path: "/AgregarPersonalInterno",
-          element: <ProtectedRoute component={AgregarPI} /> // Ruta protegida
+          path: "/AgregarPersonal",
+          element: <ProtectedRoute component={AgregarPersonal} /> // Ruta protegida
         },
         {
-          path: "/AgregarPersonalExterno",
-          element: <ProtectedRoute component={AgregarPE} /> // Ruta protegida
+          path: "/AgregarTransporte",
+          element: <ProtectedRoute component={AgregarTransporte} /> // Ruta protegida
         },
         {
-          path: "/AgregarCamion",
-          element: <ProtectedRoute component={AgregarCA} /> // Ruta protegida
-        },
-        {
-          path: "/AgregarPersonaNG",
-          element: <ProtectedRoute component={AgregarNG} /> // Ruta protegida
+          path: "/ReportarPersona",
+          element: <ProtectedRoute component={AgregarPersonaReportada} /> // Ruta protegida
         },
         {
           path: "/AgregarUsuario",
-          element: <ProtectedRoute component={AgregarU} /> // Ruta protegida
+          element: <ProtectedRoute component={AgregarUsuario} /> // Ruta protegida
         },
         {
           path: "/TablaIngreso",
           element: <ProtectedRoute component={TablaIngreso} /> // Ruta protegida
-        },
-        {
-          path: "/TablaIngresoRE",
-          element: <ProtectedRoute component={TablaIngresoRE} /> // Ruta protegida
         },
         {
           path: "/Logs",
@@ -184,29 +169,22 @@ function App() {
           path: "/FormularioSalida/:IDR",
           element: <ProtectedRoute component={FormularioSalida} /> // Ruta protegida
         },
+    
         {
-          path: "/FormularioSalidaRE/:IDR",
-          element: <ProtectedRoute component={FormularioSalidaRE} /> // Ruta protegida
-        },
-        {
-          path: "/EditarPersonalInterno/:IDPI",
-          element: <ProtectedRoute component={EditarPI} /> // Ruta protegida
-        },
-        {
-          path: "/EditarPersonalExterno/:IDPE",
+          path: "/EditarPersonal/:RUTP",
           element: <ProtectedRoute component={EditarPE} /> // Ruta protegida
         },
         {
-          path: "/EditarCamiones/:IDCA",
-          element: <ProtectedRoute component={EditarCA} /> // Ruta protegida
+          path: "/EditarTransporte/:PATENTE",
+          element: <ProtectedRoute component={EditarTransporte} /> // Ruta protegida
         },
         {
           path: "/EditarPersonasReportadas/:IDNG",
           element: <ProtectedRoute component={EditarNG} /> // Ruta protegida
         },
         {
-          path: "/EditarU/:IDU",
-          element: <ProtectedRoute component={EditarU} /> // Ruta protegida
+          path: "/EditarUsuario/:RUTU",
+          element: <ProtectedRoute component={EditarUsuario} /> // Ruta protegida
         },
         {
           path: "/Revision",

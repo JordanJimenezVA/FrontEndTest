@@ -12,7 +12,7 @@ export default function Login() {
     password: '',
   });
 
-  const [errorMessage, setErrorMessage] = useState(''); // Estado para manejar mensajes de error
+  const [errorMessage, setErrorMessage] = useState(''); 
   const navigate = useNavigate();
   const { setUserType, setNombreUsuario } = useAuth();
 
@@ -23,38 +23,34 @@ export default function Login() {
     e.preventDefault();
 
     try {
-      const isRUT = values.rut;
-      const res = await axios.post(`${host_server}/Login`, 
-        { rutU: isRUT, passwordU: values.password },
-        { withCredentials: true }  // Asegúrate de que se envíen las cookies
-    );
+        const isRUT = values.rut;
+        const res = await axios.post(`${host_server}/Login`, 
+            { rutU: isRUT, passwordU: values.password },
+            { withCredentials: true }  // Asegúrate de que se envíen las cookies
+        );
 
-      if (res.data.Status === 'Success') {
-        const userTypeRes = await axios.get(`${host_server}/UserType`, {
-          params: {
-            RUTU: isRUT,
-          },
-          withCredentials: true, 
-        });
+        if (res.data.Status === 'Success') {
+            const { userType, nombreUsuario, instalacionUsuario, instalacionU, rut } = res.data;
 
-        const userType = userTypeRes.data.userType;
-        const nombreUsuario = userTypeRes.data.nombreUsuario;
+            // Guardar los datos en localStorage
+            localStorage.setItem('nombreUsuario', nombreUsuario);
+            localStorage.setItem('rut', rut);
+            localStorage.setItem('userType', userType);
+            localStorage.setItem('instalacionU', instalacionU);
+            localStorage.setItem('instalacionUsuario', instalacionUsuario);
 
-        setNombreUsuario(nombreUsuario);
-        setUserType(userType);
+            setNombreUsuario(nombreUsuario);
+            setUserType(userType);
 
-        localStorage.setItem('nombreUsuario', nombreUsuario);
-        localStorage.setItem('userType', userType);
-
-        navigate('/Home');  
-      } else {
-        setErrorMessage('Error al ingresar/Verificar datos');
-      }
+            navigate('/Home');  
+        } else {
+            setErrorMessage('Error al ingresar/Verificar datos');
+        }
     } catch (err) {
-      console.error('Error during login:', err);
-      setErrorMessage('Ocurrió un error al intentar iniciar sesión. Por favor, inténtelo de nuevo más tarde.');
+        console.error('Error during login:', err);
+        setErrorMessage('Ocurrió un error al intentar iniciar sesión. Por favor, inténtelo de nuevo más tarde.');
     }
-  };
+};
 
   const formatRUT = (rut: string) => {
     const cleanedRut = rut.replace(/[^\dkK]/g, '');

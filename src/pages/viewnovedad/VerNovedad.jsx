@@ -11,10 +11,10 @@ const host_server = import.meta.env.VITE_SERVER_HOST;
 function VerNovedad() {
     const { IDNO } = useParams();
     const [formValues, setFormValues] = useState({
-        NOTANO: '',
-        GUARDIANO: '',
-        HORANO: '',
-        FOTOSNO: [],  
+        Descripcion: '',
+        Guardia: '',
+        Fecha: '',
+        Foto: [],  
     });
 
     useEffect(() => {
@@ -25,13 +25,13 @@ function VerNovedad() {
     const getNovedad = (IDNO) => {
         Axios.get(`${host_server}/VerNO/${IDNO}`)
             .then((res) => {
-                const { HORANO, GUARDIANO, NOTANO, FOTOSNO } = res.data[0];
-                const fotosArray = FOTOSNO.split(', ').map(filename => `${host_server}/imagenes/${filename}`);
+                const { Fecha, Guardia, Descripcion, Foto } = res.data[0];
+                const fotosArray = Foto.split(', ').map(filename => `${host_server}/imagenes/${filename}`);
                 setFormValues({
-                    HORANO,
-                    GUARDIANO,
-                    NOTANO,
-                    FOTOSNO: fotosArray,
+                    Fecha,
+                    Guardia,
+                    Descripcion,
+                    Foto: fotosArray,
                 });
             })
             .catch((error) => {
@@ -71,7 +71,7 @@ function VerNovedad() {
 
                 <div className="descripcion">
                     <h3>Descripción</h3>
-                    <p>{formValues.NOTANO}</p>
+                    <p>{formValues.Descripcion}</p>
                 </div><br></br>
                 <Swiper
                     spaceBetween={10}
@@ -79,8 +79,8 @@ function VerNovedad() {
                     navigation
                     className="mySwiper"
                 >
-                    {formValues.FOTOSNO && formValues.FOTOSNO.length > 0 ? (
-                        formValues.FOTOSNO.map((foto, index) => (
+                    {formValues.Foto && formValues.Foto.length > 0 ? (
+                        formValues.Foto.map((foto, index) => (
                             <SwiperSlide key={index}>
                                 <img src={foto} className="img-thumbnail" alt={`Foto ${index + 1}`} style={{ maxWidth: '100px', cursor: 'pointer' }} onClick={() => showImageModal(foto)} />
                             </SwiperSlide>
@@ -107,11 +107,11 @@ function VerNovedad() {
                 <div className="accion-observable-container">
                     <div className="accion-observable">
                         <h4 className='guardia-h3'>Guardia</h4>
-                        <p>{formValues.GUARDIANO}</p>
+                        <p>{formValues.Guardia}</p>
                     </div>
                     <div className="accion-observable">
                         <h4 className='fecha-h3'>Fecha</h4>
-                        <p>{formValues.HORANO}</p>
+                        <p>{formValues.Fecha}</p>
                     </div>
                 </div>
                 <div className="accion-observable">

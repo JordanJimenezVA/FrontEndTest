@@ -3,8 +3,8 @@ import Swal from 'sweetalert2';
 import Axios from "axios";
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import useChileanTime from '../../hooks/UseChileanTime';
-import useCamionTime from '../../hooks/CamionTime';
+import useChileanTime from '../../hooks/useChileanTime';
+
 import { useAuth } from '../../hooks/Auth';
 import { IconButton } from '@mui/material';
 import ClearOutlinedIcon from '@mui/icons-material/ClearOutlined';
@@ -44,7 +44,7 @@ function RevisarCamion() {
     const [GuardarProgresoDisabled, setGuardarProgresoDisabled] = useState(true);
     const [isFirstOpen, setIsFirstOpen] = useState(true);
     const chileanTime = useChileanTime();
-    const camionTime = useCamionTime();
+
 
     useEffect(() => {
         if (isFirstOpen) {
@@ -54,30 +54,30 @@ function RevisarCamion() {
         }
     }, [IDR, isFirstOpen]);
 
-    const handleFechaInicio = async () => {
-        const horaInicio = await useCamionTime();
-        setFechaInicio(horaInicio);
+    // const handleFechaInicio = async () => {
+    //     const horaInicio = await useCamionTime();
+    //     setFechaInicio(horaInicio);
 
-        setFormValues(prevValues => ({
-            ...prevValues,
-            FECHAINICIO: horaInicio,
-        }));
-        setEstado('fin');
-        setFormDisabled(false);
-        setGuardarProgresoDisabled(false);
-        setConfirmDisabled(true);
-    };
+    //     setFormValues(prevValues => ({
+    //         ...prevValues,
+    //         FECHAINICIO: horaInicio,
+    //     }));
+    //     setEstado('fin');
+    //     setFormDisabled(false);
+    //     setGuardarProgresoDisabled(false);
+    //     setConfirmDisabled(true);
+    // };
 
-    const handleFechaFin = async () => {
-        const horaFin = await useCamionTime();
-        setFechaFin(horaFin);
-        setFormValues(prevValues => ({
-            ...prevValues,
-            FECHAFIN: horaFin,
-        }));
+    // const handleFechaFin = async () => {
+    //     const horaFin = await useCamionTime();
+    //     setFechaFin(horaFin);
+    //     setFormValues(prevValues => ({
+    //         ...prevValues,
+    //         FECHAFIN: horaFin,
+    //     }));
 
-        setConfirmDisabled(false);
-    };
+    //     setConfirmDisabled(false);
+    // };
 
     const validarRut = (rut) => {
         if (!/^[0-9]+[-|‐]{1}[0-9kK]{1}$/.test(rut)) return false;

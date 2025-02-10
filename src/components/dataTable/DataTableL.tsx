@@ -1,4 +1,4 @@
-import { DataGrid, GridColDef, GridToolbar } from "@mui/x-data-grid";
+import { DataGrid, GridColDef, GridToolbarContainer, GridToolbarQuickFilter } from "@mui/x-data-grid";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState, useEffect } from 'react';
 import VisibilityIcon from '@mui/icons-material/Visibility';
@@ -17,32 +17,47 @@ import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
 import Stack from '@mui/material/Stack';
 import CircularProgress from '@mui/material/CircularProgress';
-import "./dataTable.scss";
+
+
+import * as XLSX from "xlsx";
+import "./dataTableL.scss";
+import { Button } from "@mui/material";
 const host_server = import.meta.env.VITE_SERVER_HOST;
 
 interface Row {
-    IDL: number;
+    IDR: number;
     Rol: string;
+    Fecha: string;
 }
 
 interface HistorialDetail {
-    PERSONAL: string | null;
-    APELLIDO: string | null;
-    RUT: string | null;
-    PATENTE: string | null;
-    ROL: string | null;
-    OBSERVACIONES: string | null;
-    GUIADESPACHO: string | null;
-    SELLO: string | null;
-    FECHAINGRESO: string | null;
-    FECHASALIDA: string | null;
-    ESTADO: string | null;
-    GUARDIA: string | null;
-    PATENTERACA: string | null;
-    VEHICULO: string | null;
-    MODELO: string | null;
-    COLOR: string | null;
-    MARCA: string | null;
+    Patente: string | null;
+    PatenteR: string | null;
+    Tipo: string | null;
+    Modelo: string | null;
+    Marca: string | null;
+    Color: string | null;
+
+    RutP: string | null;
+    NombreP: string | null;
+    ApellidoP: string | null;
+    TipoPersona: string | null;
+    ComentarioP: string | null;
+    ActividadP: string | null;
+    EmpresaP: string | null;
+
+    RutU: string | null;
+    NombreU: string | null;
+    FechaEntrada: string | null;
+    FechaSalida: string | null;
+    GuiaDE: string | null;
+    GuiaDS: string | null;
+    SelloEn: string | null;
+    SelloSa: string | null;
+    Instalacion: string | null;
+    Estado: string | null;
+    Ciclo: string | null;
+
 }
 
 type Props = {
@@ -52,7 +67,7 @@ type Props = {
 }
 
 const DataTableL = (props: Props) => {
-    
+
     const [rows, setRows] = useState(props.rows);
     const queryClient = useQueryClient();
     const [open, setOpen] = useState(false);
@@ -62,22 +77,42 @@ const DataTableL = (props: Props) => {
     const [error, setError] = useState<string | null>(null);
 
 
-    const fetchHistorialDetail = async (IDL: number) => {
+
+    const [paginationModel, setPaginationModel] = useState({
+        pageSize: 10,
+        page: 0,
+    });
+
+
+    const fetchHistorialDetail = async (IDR: number) => {
         setIsLoading(true);
         setError(null);
         try {
-            const response = await fetch(`${host_server}/VerLog/${IDL}`);
+            const response = await fetch(`${host_server}/VerLog/${IDR}`);
             if (!response.ok) {
                 throw new Error('Network response was not ok');
             }
             const data = await response.json();
-   
+
             setIsLoading(false);
             return data;
         } catch (error) {
             setIsLoading(false);
             throw error;
         }
+    };
+
+    const fetchAllDetails = async (idrs: number[]) => {
+        const detailPromises = idrs.map(idr =>
+            fetch(`${host_server}/VerLog/${idr}`).then((response) => {
+                if (!response.ok) {
+                    throw new Error('Error al obtener los detalles');
+                }
+                return response.json();
+            })
+        );
+        const allDetails = await Promise.all(detailPromises);
+        return allDetails.map(details => details[0]);
     };
 
     const mutation = useMutation({
@@ -95,7 +130,7 @@ const DataTableL = (props: Props) => {
 
     const handleVerL = (row: Row) => {
         setSelectedRow(row);
-        mutation.mutate(row.IDL);
+        mutation.mutate(row.IDR);
     }
 
     const handleClose = () => {
@@ -105,35 +140,93 @@ const DataTableL = (props: Props) => {
     }
 
     useEffect(() => {
-        const newRows = [...props.rows].sort((a, b) => b.IDL - a.IDL);
+        const newRows = [...props.rows].sort((a, b) => b.IDR - a.IDR);
         setRows(newRows);
     }, [props.rows]);
 
+
+
+    const handleExportExcel = async () => {
+        try {
+            const idrs = rows.map((row) => row.IDR);
+            const details = await fetchAllDetails(idrs);
+
+            // Combina y organiza los datos básicos y los detalles
+            const exportData = rows.map((row) => {
+          
+                const detail = details.find((d) => d.IDR === row.IDR) || {};
+                return {
+                    "ID Registro": row.IDR,
+                    "Nombre Completo": `${detail.NombreP || ""} ${detail.ApellidoP || ""}`,
+                    "RUT": detail.RutP || "",
+                    "Patente": detail.Patente || "",
+                    "Actividad": detail.ActividadP || "",
+                    "Fecha Entrada": detail.FechaEntrada || "",
+                    "Fecha Salida": detail.FechaSalida || "",
+                    "Sello Entrada": detail.SelloEn || "",
+                    "Sello Salida": detail.SelloSa || "",
+                    "Guía Transporte": detail.GuiaEn || "",
+                    "Guía Despacho": detail.GuiaSa || "",
+                };
+            });
+
+
+            const worksheet = XLSX.utils.json_to_sheet(exportData);
+            const workbook = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(workbook, worksheet, "Exported Data");
+
+            const columnWidths = [
+                { wch: 15 },
+                { wch: 30 },
+                { wch: 15 },
+                { wch: 15 },
+                { wch: 20 },
+                { wch: 20 },
+                { wch: 20 },
+                { wch: 20 },
+                { wch: 20 },
+                { wch: 25 },
+                { wch: 25 },
+            ];
+            worksheet['!cols'] = columnWidths;
+
+
+            XLSX.writeFile(workbook, "Historial.xlsx");
+        } catch (error) {
+            console.error("Error al exportar a Excel:", error);
+        }
+    };
+
+    const CustomToolbar = () => (
+        <GridToolbarContainer>
+            <GridToolbarQuickFilter showQuickFilter={true} />
+            <Stack direction="row" spacing={2} alignItems="center" sx={{ marginLeft: "auto" }}>
+                <Button variant="contained" color="success" onClick={handleExportExcel}>
+                    Exportar a Excel
+                </Button>
+            </Stack>
+        </GridToolbarContainer>
+    );
+
     const actionColumn: GridColDef = {
-        field: 'acciones',
-        headerName: 'Acciones',
+        field: "acciones",
+        headerName: "Acciones",
         sortable: false,
         width: 90,
-        renderCell: (params) => {
-            const row = params.row as Row;
-            return (
-                <div className="action">
-                    <div className="marcar-salida" onClick={() => handleVerL(row)}>
-                        <VisibilityIcon style={{ cursor: 'pointer' }} />
-                    </div>
-                </div>
-            );
-        },
-        cellClassName: 'centered-cell'
-    }
+        renderCell: (params) => (
+            <VisibilityIcon style={{ cursor: "pointer" }} onClick={() => handleVerL(params.row)} />
+        ),
+    };
+
     const columns = [...props.columns, actionColumn];
 
     return (
+
         <div className="dataTable">
             <DataGrid className="dataGrid"
                 rows={rows}
                 columns={columns}
-                getRowId={(row) => `${row.IDL}`}
+                getRowId={(row) => `${row.IDR}`}
                 initialState={{
                     pagination: {
                         paginationModel: {
@@ -144,14 +237,18 @@ const DataTableL = (props: Props) => {
                 localeText={{
                     noRowsLabel: 'No hay registros',
                 }}
-                slots={{ toolbar: GridToolbar }}
+                slots={{
+                    toolbar: CustomToolbar, // Usamos la barra de herramientas personalizada
+                }}
                 slotProps={{
                     toolbar: {
                         showQuickFilter: true,
                         quickFilterProps: { debounceMs: 500 },
                     }
                 }}
-                pageSizeOptions={[10]}
+                paginationModel={paginationModel}
+                onPaginationModelChange={(newModel) => setPaginationModel(newModel)}
+                pageSizeOptions={[5, 10, 20, 50]}
                 disableColumnMenu
                 disableRowSelectionOnClick
                 disableColumnFilter
@@ -185,120 +282,124 @@ const DataTableL = (props: Props) => {
                             <TableContainer component={Paper}>
                                 <Table>
                                     <TableBody>
-                                        {historialDetail.PERSONAL && (
+                                        {historialDetail.NombreP && (
                                             <TableRow>
                                                 <TableCell><strong>Personal</strong></TableCell>
-                                                <TableCell>{historialDetail.PERSONAL}</TableCell>
+                                                <TableCell>{historialDetail.NombreP}</TableCell>
                                             </TableRow>
                                         )}
-                                        {historialDetail.APELLIDO && (
+                                        {historialDetail.ApellidoP && (
                                             <TableRow>
                                                 <TableCell><strong>Apellido</strong></TableCell>
-                                                <TableCell>{historialDetail.APELLIDO}</TableCell>
+                                                <TableCell>{historialDetail.ApellidoP}</TableCell>
                                             </TableRow>
                                         )}
-                                        {historialDetail.RUT && (
+                                        {historialDetail.RutP && (
                                             <TableRow>
                                                 <TableCell><strong>Rut</strong></TableCell>
-                                                <TableCell>{historialDetail.RUT}</TableCell>
+                                                <TableCell>{historialDetail.RutP}</TableCell>
                                             </TableRow>
                                         )}
-                                        {historialDetail.ROL && (
+                                        {historialDetail.TipoPersona && (
                                             <TableRow>
                                                 <TableCell><strong>Rol</strong></TableCell>
-                                                <TableCell>{historialDetail.ROL}</TableCell>
+                                                <TableCell>{historialDetail.TipoPersona}</TableCell>
+                                            </TableRow>
+                                        )}
+                                        {historialDetail.ActividadP && (
+                                            <TableRow>
+                                                <TableCell><strong>Rol</strong></TableCell>
+                                                <TableCell>{historialDetail.ActividadP}</TableCell>
                                             </TableRow>
                                         )}
                                     </TableBody>
                                 </Table>
                             </TableContainer>
-                            <Typography variant="h6">Datos Vehiculo</Typography>
-                            <TableContainer component={Paper}>
-                                <Table>
-                                    <TableBody>
-                                        {historialDetail.VEHICULO && (
-                                            <TableRow>
-                                                <TableCell><strong>Vehiculo</strong></TableCell>
-                                                <TableCell>{historialDetail.VEHICULO}</TableCell>
-                                            </TableRow>
-                                        )}
-                                        {historialDetail.PATENTE && (
-                                            <TableRow>
-                                                <TableCell><strong>Patente</strong></TableCell>
-                                                <TableCell>{historialDetail.PATENTE}</TableCell>
-                                            </TableRow>
-                                        )}
-                                        {historialDetail.MODELO && (
-                                            <TableRow>
-                                                <TableCell><strong>Modelo</strong></TableCell>
-                                                <TableCell>{historialDetail.MODELO}</TableCell>
-                                            </TableRow>
-                                        )}
-                                        {historialDetail.COLOR && (
-                                            <TableRow>
-                                                <TableCell><strong>Color</strong></TableCell>
-                                                <TableCell>{historialDetail.COLOR}</TableCell>
-                                            </TableRow>
-                                        )}
-                                        {historialDetail.MARCA && (
-                                            <TableRow>
-                                                <TableCell><strong>Marca</strong></TableCell>
-                                                <TableCell>{historialDetail.MARCA}</TableCell>
-                                            </TableRow>
-                                        )}
-                                    </TableBody>
-                                </Table>
-                            </TableContainer>
+                            {historialDetail.Patente && (
+                                <>
+                                    <Typography variant="h6">Datos Vehiculo</Typography>
+                                    <TableContainer component={Paper}>
+                                        <Table>
+                                            <TableBody>
+                                                {historialDetail.Patente && (
+                                                    <TableRow>
+                                                        <TableCell><strong>Patente</strong></TableCell>
+                                                        <TableCell>{historialDetail.Patente}</TableCell>
+                                                    </TableRow>
+                                                )}
+                                                {historialDetail.Modelo && (
+                                                    <TableRow>
+                                                        <TableCell><strong>Modelo</strong></TableCell>
+                                                        <TableCell>{historialDetail.Modelo}</TableCell>
+                                                    </TableRow>
+                                                )}
+                                                {historialDetail.Color && (
+                                                    <TableRow>
+                                                        <TableCell><strong>Color</strong></TableCell>
+                                                        <TableCell>{historialDetail.Color}</TableCell>
+                                                    </TableRow>
+                                                )}
+                                                {historialDetail.Marca && (
+                                                    <TableRow>
+                                                        <TableCell><strong>Marca</strong></TableCell>
+                                                        <TableCell>{historialDetail.Marca}</TableCell>
+                                                    </TableRow>
+                                                )}
+                                            </TableBody>
+                                        </Table>
+                                    </TableContainer>
+                                </>
+                            )}
                             <Typography variant="h6">Datos Historial</Typography>
                             <TableContainer component={Paper}>
                                 <Table>
                                     <TableBody>
-                                        {historialDetail.ESTADO && (
+                                        {historialDetail.Estado && (
                                             <TableRow>
                                                 <TableCell><strong>Estado</strong></TableCell>
-                                                <TableCell>{historialDetail.ESTADO}</TableCell>
+                                                <TableCell>{historialDetail.Estado}</TableCell>
                                             </TableRow>
                                         )}
-                                        {historialDetail.GUARDIA && (
+                                        {historialDetail.NombreU && (
                                             <TableRow>
                                                 <TableCell><strong>Guardia</strong></TableCell>
-                                                <TableCell>{historialDetail.GUARDIA}</TableCell>
+                                                <TableCell>{historialDetail.NombreU}</TableCell>
                                             </TableRow>
                                         )}
-                                        {historialDetail.SELLO && (
+                                        {historialDetail.SelloEn && (
                                             <TableRow>
                                                 <TableCell><strong>Sello</strong></TableCell>
-                                                <TableCell>{historialDetail.SELLO}</TableCell>
+                                                <TableCell>{historialDetail.SelloEn}</TableCell>
                                             </TableRow>
                                         )}
-                                        {historialDetail.PATENTERACA && (
+                                        {historialDetail.PatenteR && (
                                             <TableRow>
                                                 <TableCell><strong>Patente Rampa</strong></TableCell>
-                                                <TableCell>{historialDetail.PATENTERACA}</TableCell>
+                                                <TableCell>{historialDetail.PatenteR}</TableCell>
                                             </TableRow>
                                         )}
-                                        {historialDetail.GUIADESPACHO && (
+                                        {historialDetail.GuiaDE && (
                                             <TableRow>
                                                 <TableCell><strong>Planilla Transporte</strong></TableCell>
-                                                <TableCell>{historialDetail.GUIADESPACHO}</TableCell>
+                                                <TableCell>{historialDetail.GuiaDE}</TableCell>
                                             </TableRow>
                                         )}
-                                        {historialDetail.FECHAINGRESO && (
+                                        {historialDetail.FechaEntrada && (
                                             <TableRow>
                                                 <TableCell><strong>Fecha Ingreso</strong></TableCell>
-                                                <TableCell>{historialDetail.FECHAINGRESO}</TableCell>
+                                                <TableCell>{historialDetail.FechaEntrada}</TableCell>
                                             </TableRow>
                                         )}
-                                        {historialDetail.FECHASALIDA && (
+                                        {historialDetail.FechaSalida && (
                                             <TableRow>
                                                 <TableCell><strong>Fecha Salida</strong></TableCell>
-                                                <TableCell>{historialDetail.FECHASALIDA}</TableCell>
+                                                <TableCell>{historialDetail.FechaSalida}</TableCell>
                                             </TableRow>
                                         )}
-                                        {historialDetail.OBSERVACIONES && (
+                                        {historialDetail.ComentarioP && (
                                             <TableRow>
                                                 <TableCell><strong>Observaciones</strong></TableCell>
-                                                <TableCell>{historialDetail.OBSERVACIONES}</TableCell>
+                                                <TableCell>{historialDetail.ComentarioP}</TableCell>
                                             </TableRow>
                                         )}
                                     </TableBody>
@@ -312,6 +413,7 @@ const DataTableL = (props: Props) => {
                 </DialogContent>
             </Dialog>
         </div>
+
     );
 }
 

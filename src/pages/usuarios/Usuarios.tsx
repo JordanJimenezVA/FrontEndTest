@@ -9,10 +9,12 @@ import { Button } from "@mui/material";
 const host_server = import.meta.env.VITE_SERVER_HOST;
 
 const columns: GridColDef[] = [
-  { field: 'IDU', headerName: 'ID', width: 70, type: 'number' },
   { field: 'RUTU', headerName: 'Rut', type: 'string', width: 150 },
-  { field: 'NOMBREU', headerName: 'Nombre', type: 'string', width: 250 },
-  { field: 'TIPOU', headerName: 'Tipo', type: 'string', width: 250 },
+  { field: 'NombreU', headerName: 'Nombre', type: 'string', width: 150 },
+  { field: 'TipoU', headerName: 'Tipo', type: 'string', width: 150 },
+  { field: 'InstalacionU', headerName: 'Instalacion', type: 'string', width: 150 },
+
+
 ];
 
 const Usuarios = () => {

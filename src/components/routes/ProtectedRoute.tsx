@@ -9,16 +9,19 @@ interface ProtectedRouteProps {
 
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ component: Component }) => {
   const token = Cookies.get('token');  // Asegúrate de que el token esté disponible en las cookies
-
+console.log("Token desde cookie:", token); // Depuración
   if (!token) {
+    console.error('No token found in cookies');
     return <Navigate to="/" />;
   }
 
   try {
     const decodedToken = jwtDecode<JwtPayload>(token);
-    const currentTime = Date.now() / 1000;
+    console.log('Token decodificado:', decodedToken);
 
+    const currentTime = Date.now() / 1000;
     if (decodedToken.exp && decodedToken.exp < currentTime) {
+      console.error('Token expirado');
       Cookies.remove('token');
       return <Navigate to="/" />;
     }
@@ -29,6 +32,7 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ component: Component })
 
   return <Component />;
 };
+
 
 
 export default ProtectedRoute;

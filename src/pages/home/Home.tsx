@@ -5,12 +5,12 @@ import TopBox from "../../components/topBox/TopBox";
 import ChartBox from "../../components/chartbox/ChartBox";
 import { chartBoxConversion, chartBoxProduct, chartBoxRevenue, chartBoxUser } from "../../data";
 import { useQuery } from "@tanstack/react-query";
-import GuardiaID from "../../hooks/GuardiaID";
+
 
 const host_server = import.meta.env.VITE_SERVER_HOST;
 
 const Home = () => {
-  const idInst = GuardiaID();
+  const idInst = localStorage.getItem("instalacionU") || "";
 
   const fetchChartData = async () => {
   
@@ -28,7 +28,7 @@ const Home = () => {
   const { isLoading, data, error } = useQuery({
     queryKey: ["ChartBox", idInst],
     queryFn: fetchChartData,
-    enabled: !!idInst, // Solo ejecuta la consulta si IDINST está disponible
+    enabled: !!idInst, 
   });
 
   if (isLoading) {
@@ -41,61 +41,19 @@ const Home = () => {
 
   const dataArray = Array.isArray(data) ? data : [];
 
-  const rolesExternos = [
-    "Especialista Trade",
-    "Chofer Camión",
-    "Peoneta",
-    "Gestor Trade",
-    "Mantencion Cctv",
-    "Mantencion Gruas",
-    "Mantencion Jardines",
-    "Mantencion General",
-    "Mantencion Bresler",
-    "Tecnico Fumigación",
-    "OtrosEx",
-  ];
 
-  const rolesInternos = [
-    "Aseo",
-    "Administrativo Existencias",
-    "Administrativo de Distribución",
-    "Administrativo Congelados",
-    "Jefe de Sucursal",
-    "Jefe Comercial",
-    "Jefe de Distribución",
-    "Coordinador Trade Marketing",
-    "Supervisor de Distribución",
-    "Supervisor Ventas",
-    "Cajero",
-    "Secretaria",
-    "Movilizador",
-    "Gruero",
-    "Despachador",
-    "Recepcionista",
-    "Visita Carozzi",
-    "Vendedor",
-  ];
-
-  const rolesCamiones = [
-    "CAMION",
-    "SEMIREMOLQUE",
-    "TRACTOCAMION",
-    "CHASIS CABINADO",
-    "REMOLQUE",
-    "OtrosCA",
-  ];
-
-  const cantidadExterno = dataArray.filter((item: any) =>
-    rolesExternos.includes(item.ROL)
+  // Contar los tipos de personas
+  const cantidadExterno = dataArray.filter(
+    (item: any) => item.TipoPersona === "PersonalExterno"
   ).length;
-  const cantidadInterno = dataArray.filter((item: any) =>
-    rolesInternos.includes(item.ROL)
+  const cantidadInterno = dataArray.filter(
+    (item: any) => item.TipoPersona === "PersonalInterno"
   ).length;
-  const cantidadCamion = dataArray.filter((item: any) =>
-    rolesCamiones.includes(item.ROL)
+  const cantidadCamion = dataArray.filter(
+    (item: any) => item.Tipo === "Camion"
   ).length;
 
-  const total = cantidadInterno + cantidadExterno + cantidadCamion;
+  const total = cantidadExterno + cantidadInterno + cantidadCamion;
 
   return (
     <div className="home">
@@ -103,7 +61,7 @@ const Home = () => {
         <TopBox />
       </div>
       <div className="box box2">
-        <ChartBox url={""} {...chartBoxUser} cantidad={total} />
+        <ChartBox {...chartBoxUser} cantidad={total} />
       </div>
       <div className="box box3">
         <ChartBox {...chartBoxProduct} cantidad={cantidadInterno} />

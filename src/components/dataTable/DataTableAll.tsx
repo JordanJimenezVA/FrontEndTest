@@ -1,4 +1,4 @@
-import { DataGrid, GridColDef, GridToolbar } from "@mui/x-data-grid";
+import { DataGrid, GridColDef, GridToolbarQuickFilter  } from "@mui/x-data-grid";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -40,7 +40,7 @@ const DataTableAll = (props: Props) => {
     }
 
     useEffect(() => {
-        setRows(props.rows || []); // Asegúrate de que sea un array
+        setRows(props.rows || []);
     }, [props.rows]);
 
     const actionColumn: GridColDef = {
@@ -67,7 +67,7 @@ const DataTableAll = (props: Props) => {
         <div className="dataTable">
             <DataGrid className="dataGrid"
                 rows={rows}
-                columns={[props.columns[0], actionColumn, ...props.columns.slice(2)]}
+                columns={[...props.columns, actionColumn]}
                 getRowId={(row) => `${row.IDR}`}
                 initialState={{
                     pagination: {
@@ -79,7 +79,7 @@ const DataTableAll = (props: Props) => {
                 localeText={{
                     noRowsLabel: 'No hay registros',
                 }}
-                slots={{ toolbar: GridToolbar }}
+                slots={{ toolbar: GridToolbarQuickFilter  }}
                 slotProps={{
                     toolbar: {
                         showQuickFilter: true,

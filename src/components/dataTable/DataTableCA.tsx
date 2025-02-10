@@ -1,4 +1,4 @@
-import { DataGrid, GridColDef, GridToolbar } from "@mui/x-data-grid";
+import { DataGrid, GridColDef, GridToolbarQuickFilter  } from "@mui/x-data-grid";
 import "./dataTable.scss";
 import axios from "axios";
 import Swal from 'sweetalert2';
@@ -26,22 +26,22 @@ const DataTableCA = (props: Props) => {
 
     const deleteMutationa = useMutation({
 
-        mutationFn: (IDCA: number) => {
-            return axios.delete(`${host_server}/${props.slug}/${IDCA}`);
+        mutationFn: (PATENTE: number) => {
+            return axios.delete(`${host_server}/${props.slug}/${PATENTE}`);
         },
-        onSuccess: (IDCA) => {
+        onSuccess: (PATENTE) => {
             Swal.fire('Borrado!', 'El registro ha sido borrado.', 'success');
             queryClient.invalidateQueries({
                 queryKey: [props.slug]
             });
-            setRows(rows.filter((row: any) => row.IDCA !== IDCA));
+            setRows(rows.filter((row: any) => row.PATENTE !== PATENTE));
         },
         onError: () => {
             Swal.fire('Error!', 'No se pudo borrar el registro.', 'error');
         }
     });
 
-    const handleDeleteCA = (IDCA: number) => {
+    const handleDeleteCA = (PATENTE: number) => {
         Swal.fire({
             title: '¿Estás seguro de borrar?',
             text: "¡No podrás revertir esto!",
@@ -52,13 +52,13 @@ const DataTableCA = (props: Props) => {
             confirmButtonText: 'Sí, bórralo!'
         }).then((result) => {
             if (result.isConfirmed) {
-                deleteMutationa.mutate(IDCA);
+                deleteMutationa.mutate(PATENTE);
             }
         });
     };
 
-    const handleEditClick = (IDCA: number) => {
-        navigate(`/EditarCamiones/${IDCA}`);
+    const handleEditClick = (PATENTE: number) => {
+        navigate(`/EditarTransporte/${PATENTE}`);
     }
 
     const actionColumn: GridColDef = {
@@ -70,14 +70,14 @@ const DataTableCA = (props: Props) => {
             return (
                 <div className="action">
                     <IconButton
-                        onClick={() => handleEditClick(params.row.IDCA)}
+                        onClick={() => handleEditClick(params.row.PATENTE)}
                         color="primary"
                         aria-label="Editar"
                     >
                         <EditIcon />
                     </IconButton>
                     <IconButton
-                        onClick={() => handleDeleteCA(params.row.IDCA)}
+                        onClick={() => handleDeleteCA(params.row.PATENTE)}
                         color="secondary"
                         aria-label="Eliminar"
                     >
@@ -93,7 +93,7 @@ const DataTableCA = (props: Props) => {
             <DataGrid className="dataGrid"
                 rows={props.rows}
                 columns={[...props.columns, actionColumn]}
-                getRowId={(row) => `${row.IDCA}`}
+                getRowId={(row) => `${row.PATENTE}`}
                 initialState={{
                     pagination: {
                         paginationModel: {
@@ -104,7 +104,7 @@ const DataTableCA = (props: Props) => {
                 localeText={{
                     noRowsLabel: 'No hay registros',
                 }}
-                slots={{ toolbar: GridToolbar }}
+                slots={{ toolbar: GridToolbarQuickFilter  }}
                 slotProps={{
                     toolbar: {
                         showQuickFilter: true,

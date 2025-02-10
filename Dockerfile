@@ -1,30 +1,62 @@
-# Usa una imagen base de Node.js para construir el frontend
+# FROM node:18 as build
+
+# # Establece el directorio de trabajo
+# WORKDIR /app
+
+# # Copia los archivos para la instalación
+# COPY package*.json ./
+# COPY . .
+
+# # Instala las dependencias
+# RUN npm install
+
+# # Construye la aplicación
+# RUN npm run build
+
+# # Usa una imagen más ligera
+# FROM nginx:alpine
+
+# # Copia los archivos de construcción al contenedor de nginx
+# COPY --from=build /app/dist /usr/share/nginx/html
+
+# # Copia la configuración personalizada de nginx
+# COPY nginx.conf /etc/nginx/conf.d/default.conf
+
+# # Exponer el puerto 80
+# EXPOSE 80
+
+# # Comando para iniciar nginx
+# CMD ["nginx", "-g", "daemon off;"]
+# Etapa de construcción
+
+# Etapa de construcción
+# Imagen base de Node.js
 FROM node:18 as build
 
-# Establece el directorio de trabajo
+# Establecer el directorio de trabajo
 WORKDIR /app
 
-# Copia los archivos necesarios para la instalación y construcción
+# Copiar los archivos necesarios
 COPY package*.json ./
-COPY . .
+COPY . ./
 
-# Instala las dependencias
+# Instalar dependencias
 RUN npm install
 
-# Construye la aplicación
+# Construir el proyecto
 RUN npm run build
 
-# Usa una imagen más ligera para servir el frontend
+# Usar una imagen más ligera para producción
 FROM nginx:alpine
 
-# Copia los archivos de construcción al contenedor de nginx
+# Copiar la compilación al contenedor de Nginx
 COPY --from=build /app/dist /usr/share/nginx/html
 
-# Copia la configuración personalizada de nginx
+# Configurar Nginx
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
-# Exponer el puerto 80 para servir la aplicación
+# Exponer el puerto
 EXPOSE 80
 
-# Comando para iniciar nginx
+# Iniciar Nginx
 CMD ["nginx", "-g", "daemon off;"]

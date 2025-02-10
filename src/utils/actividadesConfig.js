@@ -1,0 +1,35 @@
+export const actividadesPersonalInterno = [
+    "Aseo",
+    "Administrativo Existencias",
+    "Administrativo de Distribución",
+    "Administrativo Congelados",
+    "Jefe de Sucursal",
+    "Jefe Comercial",
+    "Jefe de Distribución",
+    "Coordinador Trade Marketing",
+    "Supervisor de Distribución",
+    "Supervisor Ventas",
+    "Cajero",
+    "Secretaria",
+    "Movilizador",
+    "Gruero",
+    "Despachador",
+    "Recepcionista",
+    "Visita Carozzi",
+    "Vendedor",
+  ];
+  
+  export const actividadesPersonalExterno = [
+    "Especialista Trade",
+    "Chofer Camión",
+    "Peoneta",
+    "Gestor Trade",
+    "Mantencion Cctv",
+    "Mantencion Gruas",
+    "Mantencion Jardines",
+    "Mantencion General",
+    "Mantencion Bresler",
+    "Tecnico Fumigación",
+    "OtrosEx",
+  ];
+  

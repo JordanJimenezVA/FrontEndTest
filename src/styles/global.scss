@@ -41,7 +41,9 @@ a {
 
 .menuContainer {
  
-  padding: 5px 20px;
+  // padding: 5px 20px;
+  padding-right: 35px;
+    padding-left: 20px;
   border-right: 2px solid $soft-bg;
 
   @include lg {

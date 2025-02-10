@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { DataGrid, GridColDef, GridToolbar } from "@mui/x-data-grid";
+import { DataGrid, GridColDef, GridToolbarQuickFilter } from "@mui/x-data-grid";
 import "./dataTable.scss";
 import axios from "axios";
 import Swal from 'sweetalert2';
@@ -107,7 +107,7 @@ const DataTable = (props: Props) => {
                 localeText={{
                     noRowsLabel: 'No hay registros',
                 }}
-                slots={{ toolbar: GridToolbar }}
+                slots={{ toolbar: GridToolbarQuickFilter  }}
                 slotProps={{
                     toolbar: {
                         showQuickFilter: true,

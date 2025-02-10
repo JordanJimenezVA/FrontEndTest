@@ -2,20 +2,21 @@ import React, { useState } from 'react';
 import Swal from 'sweetalert2';
 import Axios from "axios";
 import "./addNO.scss";
-import useChileanTime from "../../hooks/UseChileanTime";
+
 import { useAuth } from '../../hooks/Auth';
 import { Button } from '@mui/material';
+import useChileanTime from '../../hooks/useChileanTime';
 const host_server = import.meta.env.VITE_SERVER_HOST;
-import GuardiaID from "../../hooks/GuardiaID";
+
 
 function AgregarNO() {
-    const { nombreUsuario } = useAuth();
-    const chileanTime = useChileanTime();
+    const nombreUsuario = localStorage.getItem("nombreUsuario") || "";
+    const IDINST = localStorage.getItem("instalacionU") || "";
+    const  chileanTime  = useChileanTime();
     const [NotaNO, setNotaNO] = useState('');
-    const [GuardiaNO, setGuardiaNO] = useState("");
     const [HoraNO, setHoraNO] = useState("");
     const [FOTOSNO, setFOTOSNO] = useState([]);
-    const IDINST = GuardiaID();
+
 
     const ingresoformdNO = () => {
         const formData = new FormData();
